@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-	Jumbotron,
-	Container,
-	Col,
-	Form,
-	Button,
-	Card,
-	CardColumns
-} from 'react-bootstrap';
+import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
 import { searchGoogleBooks } from '../utils/API';
@@ -55,6 +47,8 @@ const SearchBooks = () => {
 				image: book.volumeInfo.imageLinks?.thumbnail || ''
 			}));
 
+			console.log(bookData[0]);
+
 			setSearchedBooks(bookData);
 			setSearchInput('');
 		} catch (err) {
@@ -80,7 +74,7 @@ const SearchBooks = () => {
 			// const response = await saveBook(bookToSave, token);
 			const response = await saveBook({
 				variables: {
-					bookId
+					input: bookToSave
 				}
 			});
 
@@ -106,20 +100,14 @@ const SearchBooks = () => {
 								<Form.Control
 									name="searchInput"
 									value={searchInput}
-									onChange={(e) =>
-										setSearchInput(e.target.value)
-									}
+									onChange={(e) => setSearchInput(e.target.value)}
 									type="text"
 									size="lg"
 									placeholder="Search for a book"
 								/>
 							</Col>
 							<Col xs={12} md={4}>
-								<Button
-									type="submit"
-									variant="success"
-									size="lg"
-								>
+								<Button type="submit" variant="success" size="lg">
 									Submit Search
 								</Button>
 							</Col>
@@ -130,49 +118,31 @@ const SearchBooks = () => {
 
 			<Container>
 				<h2>
-					{searchedBooks.length
-						? `Viewing ${searchedBooks.length} results:`
-						: 'Search for a book to begin'}
+					{searchedBooks.length ? `Viewing ${searchedBooks.length} results:` : 'Search for a book to begin'}
 				</h2>
 				<CardColumns>
 					{searchedBooks.map((book) => {
 						return (
 							<Card key={book.bookId} border="dark">
 								{book.image ? (
-									<Card.Img
-										src={book.image}
-										alt={`The cover for ${book.title}`}
-										variant="top"
-									/>
+									<Card.Img src={book.image} alt={`The cover for ${book.title}`} variant="top" />
 								) : null}
 								<Card.Body>
 									<Card.Title>{book.title}</Card.Title>
-									<p className="small">
-										Authors: {book.authors}
-									</p>
+									<p className="small">Authors: {book.authors}</p>
 									<Card.Text>{book.description}</Card.Text>
 									{Auth.loggedIn() && (
 										<Button
-											disabled={savedBookIds?.some(
-												(savedBookId) =>
-													savedBookId === book.bookId
-											)}
+											disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
 											className="btn-block btn-info"
-											onClick={() =>
-												handleSaveBook(book.bookId)
-											}
+											onClick={() => handleSaveBook(book.bookId)}
 										>
-											{savedBookIds?.some(
-												(savedBookId) =>
-													savedBookId === book.bookId
-											)
+											{savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
 												? 'This book has already been saved!'
 												: 'Save this Book!'}
 										</Button>
 									)}
-									{error && (
-										<div>Something went wrong...</div>
-									)}
+									{error && <div>Something went wrong...</div>}
 								</Card.Body>
 							</Card>
 						);
