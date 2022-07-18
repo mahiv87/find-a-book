@@ -33,9 +33,9 @@ const LoginForm = () => {
 				variables: { ...userFormData }
 			});
 
-			if (!response.ok) {
-				throw new Error('something went wrong!');
-			}
+			// if (!response.ok) {
+			// 	throw new Error('something went wrong!');
+			// }
 
 			// const { token, user } = await response.json();
 			// console.log(user);
