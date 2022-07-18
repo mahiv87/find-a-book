@@ -17,6 +17,13 @@ const resolvers = {
 				);
 			}
 			throw new AuthenticationError('You need to be logged in!');
+		},
+		books: async (parent, { username }) => {
+			const params = username ? { username } : {};
+			return Book.find(params).sort({ createdAt: -1 });
+		},
+		book: async (parent, { bookId }) => {
+			return Book.findOne({ _id: bookId });
 		}
 	}
 };
