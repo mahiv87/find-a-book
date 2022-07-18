@@ -57,18 +57,7 @@ const SearchBooks = () => {
 		}
 	};
 
-	const [saveBook, { error }] = useMutation(SAVE_BOOK, {
-		update(cache, { data: { saveBook } }) {
-			try {
-				cache.writeQuery({
-					query: GET_ME,
-					data: { me: saveBook }
-				});
-			} catch (e) {
-				console.error(e);
-			}
-		}
-	});
+	const [saveBook] = useMutation(SAVE_BOOK);
 
 	// create function to handle saving a book to our database
 	const handleSaveBook = async (bookId) => {
@@ -86,7 +75,17 @@ const SearchBooks = () => {
 		try {
 			// const response = await saveBook(bookToSave, token);
 			await saveBook({
-				variables: { book: bookToSave }
+				variables: { book: { ...bookToSave } },
+				update(cache, { data: { saveBook } }) {
+					try {
+						cache.writeQuery({
+							query: GET_ME,
+							data: { me: saveBook }
+						});
+					} catch (err) {
+						console.error(err);
+					}
+				}
 			});
 
 			// if (!response.ok) {
