@@ -39,16 +39,18 @@ const SearchBooks = () => {
 			}
 
 			const { items } = await response.json();
+			// console.log(items);
 
 			const bookData = items.map((book) => ({
 				bookId: book.id,
 				authors: book.volumeInfo.authors || ['No author to display'],
 				title: book.volumeInfo.title,
 				description: book.volumeInfo.description,
-				image: book.volumeInfo.imageLinks?.thumbnail || ''
+				image: book.volumeInfo.imageLinks?.thumbnail || '',
+				link: book.volumeInfo.infoLink || ''
 			}));
 
-			// console.log(bookData[0]);
+			console.log(bookData[0]);
 
 			setSearchedBooks(bookData);
 			setSearchInput('');
@@ -140,6 +142,9 @@ const SearchBooks = () => {
 								) : null}
 								<Card.Body>
 									<Card.Title>{book.title}</Card.Title>
+									<a className="small" href={book.link} target="_blank" rel="noreferrer">
+										Buy on Google Books!
+									</a>
 									<p className="small">Authors: {book.authors}</p>
 									<Card.Text>{book.description}</Card.Text>
 									{Auth.loggedIn() && (

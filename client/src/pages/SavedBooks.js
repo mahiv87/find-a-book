@@ -79,6 +79,9 @@ const SavedBooks = () => {
 								) : null}
 								<Card.Body>
 									<Card.Title>{book.title}</Card.Title>
+									<a className="small" href={book.link} target="_blank" rel="noreferrer">
+										Buy on Google Books!
+									</a>
 									<p className="small">Authors: {book.authors}</p>
 									<Card.Text>{book.description}</Card.Text>
 									<Button
