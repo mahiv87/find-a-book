@@ -14,7 +14,7 @@ const SavedBooks = () => {
 	const [deleteBook] = useMutation(DELETE_BOOK);
 
 	const userData = data?.me || {};
-	console.log(userData.savedBooks);
+	console.log(userData);
 
 	if (!userData?.username) {
 		return <h4>You need to be logged in to see this page!</h4>;
@@ -30,14 +30,16 @@ const SavedBooks = () => {
 
 		try {
 			await deleteBook({
-				variables: { bookId: bookId },
-				update: (cache) => {
-					const data = cache.readQuery({ query: GET_ME });
-					const userDataCache = data.me;
-					const savedBooksCache = userDataCache.savedBooks;
-					const updatedBookCache = savedBooksCache.filter((book) => book.bookId !== bookId);
-					data.me.savedBooks = updatedBookCache;
-					cache.writeQuery({ query: GET_ME, data: { data: { ...data.me.savedBooks } } });
+				variables: { bookId },
+				update(cache, { data: { deleteBook } }) {
+					try {
+						cache.writeQuery({
+							query: GET_ME,
+							data: { me: deleteBook }
+						});
+					} catch (err) {
+						console.error(err);
+					}
 				}
 			});
 
