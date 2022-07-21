@@ -14,7 +14,7 @@ const SavedBooks = () => {
 	const [deleteBook] = useMutation(DELETE_BOOK);
 
 	const userData = data?.me || {};
-	console.log(userData);
+	// console.log(userData);
 
 	if (!userData?.username) {
 		return <h4>You need to be logged in to see this page!</h4>;
